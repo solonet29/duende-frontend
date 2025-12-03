@@ -4,12 +4,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
     // 1. CONFIGURACIÓN Y SELECTORES
     // =========================================================================
-    const API_BASE_URL = window.location.hostname.includes('localhost') ? 'http://localhost:3000' : 'https://duende-api.vercel.app';
+    // Función para determinar la URL de la API dinámicamente
+    const getApiBaseUrl = () => {
+        const hostname = window.location.hostname;
+
+        if (hostname.includes('localhost')) {
+            return 'http://localhost:3000'; // Para desarrollo local
+        }
+
+        if (hostname.includes('nuevobuscador.afland.es')) {
+            return 'https://api-v2.afland.es'; // Para nuestro nuevo buscador de pruebas
+        }
+
+        // Para todo lo demás (es decir, el buscador de producción), usamos la API antigua
+        return 'https://duende-api.vercel.app';
+    };
+
+    const API_BASE_URL = getApiBaseUrl();
     let eventsCache = {};
 
     const modalContent = {
         howItWorks: `
-        <p><strong>Duende Finder es tu asistente inteligente para descubrir el flamenco a tu alrededor.</strong></p>
+        <p><strong>Duende Finder es tu asistente inteligente para descubrir el flamenco a tu alrededor y en todo el mundo.</strong></p>
         <ol>
             <li><strong>Encuentra Eventos Cerca de Ti:</strong> Pulsa el botón <strong>"Cerca de mí"</strong> para que el buscador te muestre al instante los tablaos y eventos más próximos a tu ubicación actual.</li>
             <li><strong>Explora el Resto:</strong> Navega por la lista completa de eventos. Usamos IA para encontrar y organizar actuaciones de múltiples fuentes públicas.</li>
